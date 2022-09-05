@@ -1,0 +1,27 @@
+{
+  "name": "spidersolitairegame",
+  "author": "Idlerus",
+  "version": "1.0.0",
+  "main": "dist/soliBoot.js",
+  "description": "NPM Spider solitaire lib",
+  "keywords": ["game", "spider", "solitaire"],
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "start": "webpack serve --mode development",
+    "build": "webpack --mode production"
+  },
+  "devDependencies": {
+    "css-loader": "^6.7.1",
+    "cssnano": "^5.1.13",
+    "html-webpack-plugin": "^5.5.0",
+    "postcss-loader": "^7.0.1",
+    "sass": "^1.54.8",
+    "sass-loader": "^13.0.2",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^9.3.1",
+    "typescript": "^4.8.2",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.10.1"
+  }
+}
