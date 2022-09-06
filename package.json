@@ -1,7 +1,7 @@
 {
   "name": "spidersolitairegame",
   "author": "Idlerus",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "dist/soli.js",
   "description": "NPM Spider solitaire lib",
   "keywords": ["game", "spider", "solitaire", "card", "cards", "fun"],
