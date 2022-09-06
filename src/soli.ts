@@ -11,6 +11,8 @@ class Soli
   private sCount: number = 2;
   private set: c[] = [];
 
+  private win: boolean = false;
+
   private slots: {[slot: string]: c[]} = {};
   private decks: c[] = [];
 
@@ -78,7 +80,27 @@ class Soli
   public updateG(): void
   {
     this.rowSolved();
+    this.gameWon();
+
     this.table.innerHTML = '';
+
+    if(this.win)
+    {
+      let win = document.createElement('span');
+      win.innerText = 'You win!';
+      win.classList.add('win');
+      win.style.position = 'absolute';
+      win.style.top = '50%';
+      win.style.left = '50%';
+      win.style.transformOrigin = '50% 50%';
+      win.style.background = '#fff';
+      win.style.padding = '15px';
+      win.style.fontSize = '32px';
+      win.style.border = '3px solid #ddd';
+      win.style.boxShadow = '0 10px 15px rgb(0 0 0 / 30%)';
+      this.table.appendChild(win);
+    }
+
     for(let i in this.slots)
     {
       let slot = document.createElement('div');
@@ -117,7 +139,7 @@ class Soli
             cDiv.dataset['c'] = c.c;
             cDiv.dataset['hidden'] = c.hidden ? 'true':'false';
             cDiv.classList.add(c.type.toLowerCase());
-            cDiv.innerHTML = '<span>' + c.c + '</span><span>' + c.type + ' •</span>';
+            cDiv.innerHTML = '<span>' + c.c + '</span><span></span>';
             let listener = () =>
             {
               if(this.selected.slot !== null && this.selected.index !== null)
@@ -167,6 +189,23 @@ class Soli
     return div;
   }
 
+  private gameWon(): void
+  {
+    let empty = true;
+    for(let i in this.slots)
+    {
+      if(this.slots[i].length > 0)
+      {
+        empty = false;
+      }
+    }
+
+    if(empty)
+    {
+      this.win = true;
+    }
+  }
+
   private canMove(slot: number, index: number): boolean
   {
     let count = this.slots[slot].length - index;
@@ -196,23 +235,19 @@ class Soli
           let index = this.slots[i].indexOf(c);
           if(this.slots[i].length - 1 === index)
           {
-            let cnt = 0;
-            for(let x = index-1; x > 0; x--)
+            if(this.slots[i].length >= 12)
             {
-              if(this.canPlace(this.slots[i][x+1], this.slots[i][x]))
+              let test = this.slots[i].slice(-13).reverse();
+              console.log(test, this.slots[i]);
+              let string = '';
+              for(let c of test)
               {
-                cnt++;
+                string += c.c;
               }
-            }
-            if(cnt === this.pack.length-1)
-            {
-              for(let x = index; x > index-this.pack.length; x--)
+              if(string === 'A2345678910JQK')
               {
-                this.slots[i].pop();
-              }
-              if(this.slots[i][this.slots[i].length-1].hidden === true)
-              {
-                this.slots[i][this.slots[i].length-1].hidden = false;
+                this.slots[i].splice(this.slots[i].length-13, 13);
+                this.slots[i][this.slots[i].length -1].hidden = false;
               }
             }
           }

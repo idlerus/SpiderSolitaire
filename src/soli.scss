@@ -7,14 +7,15 @@
     width: 18px;
     height: 28px;
 
-    border: 1px solid #a5c5d8;
-    background: linear-gradient(45deg, rgba(10,113,153,1) 0%, rgba(0,109,171,1) 45%, rgba(180,180,180,1) 45%, rgba(191,191,191,1) 46%, rgba(2,151,191,1) 46%, rgba(0,133,147,1) 100%);
+    border: 1px solid #5d5d5d;
+    background: linear-gradient(45deg, rgb(192, 105, 105) 0%, rgb(204, 83, 83) 45%, rgb(210, 210, 210) 45%, rgba(191,191,191,1) 46%, rgba(192, 105, 105,1) 46%, rgba(204, 83, 83,1) 100%);
     background-size: 5px 5px;
     background-position: 0 0, 10px 0, 10px -10px, 0px 10px;
     padding: 3px;
     margin: 3px;
     color: black;
     cursor: grab;
+    border-radius: 3px;
   }
 
   div {
@@ -22,14 +23,15 @@
     flex-direction: column;
 
     div {
+      border-radius: 3px;
       width: 18px;
       height: 28px;
 
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
 
-      border: 1px solid #a5c5d8;
-      background: rgba(2,151,191,1);
+      border: 1px solid #494949;
+      background: rgb(206, 206, 206);
       padding: 3px;
       margin: 3px;
       margin-top: -15px;
@@ -40,7 +42,11 @@
 
       &.active {
         border-color: gold !important;
-        background: #50b9d6 !important;
+        background: #9ee3fc !important;
+      }
+
+      span {
+        font-size: 10px;
       }
 
       &:first-child {
@@ -49,18 +55,38 @@
 
       &.rd span:last-child {
         color: red;
+
+        &::after {
+          font-size: 10px;
+          content: '♦';
+        }
       }
 
       &.rh span:last-child  {
         color: #1bff00;
+
+        &::after {
+          font-size: 10px;
+          content: '♥';
+        }
       }
 
       &.bd span:last-child  {
         color: #003cff;
+
+        &::after {
+          font-size: 10px;
+          content: '♣';
+        }
       }
 
       &.bl span:last-child  {
         color: black;
+
+        &::after {
+          font-size: 10px;
+          content: '♠';
+        }
       }
 
       span:last-child  {
@@ -68,7 +94,7 @@
       }
 
       &.back {
-        background: linear-gradient(45deg, rgba(10,113,153,1) 0%, rgba(0,109,171,1) 45%, rgba(180,180,180,1) 45%, rgba(191,191,191,1) 46%, rgba(2,151,191,1) 46%, rgba(0,133,147,1) 100%);
+        background: linear-gradient(45deg, rgb(192, 105, 105) 0%, rgb(204, 83, 83) 45%, rgb(210, 210, 210) 45%, rgba(191,191,191,1) 46%, rgba(192, 105, 105,1) 46%, rgba(204, 83, 83,1) 100%);
         background-size: 5px 5px;
         background-position: 0 0, 10px 0, 10px -10px, 0px 10px;
         cursor: not-allowed;
