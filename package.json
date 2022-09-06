@@ -1,11 +1,18 @@
 {
   "name": "spidersolitairegame",
   "author": "Idlerus",
-  "version": "1.0.1",
+  "version": "1.0.6",
   "main": "dist/soli.js",
   "description": "NPM Spider solitaire lib",
-  "keywords": ["game", "spider", "solitaire"],
+  "keywords": ["game", "spider", "solitaire", "card", "cards", "fun"],
   "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "url",
+    "url": "https://github.com/idlerus/SpiderSolitaire.git"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "webpack serve --mode development",
     "build": "webpack --mode production"

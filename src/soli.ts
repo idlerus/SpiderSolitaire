@@ -2,7 +2,7 @@ import './soli.scss';
 
 type c = {'type': string, 'c': string, 'hidden': boolean};
 
-export default class Soli
+class Soli
 {
   private table: HTMLDivElement;
 
@@ -314,3 +314,6 @@ export default class Soli
     return array;
   }
 }
+
+export default Soli;
+module.exports.default = Soli;

@@ -11,6 +11,10 @@ module.exports = {
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
+    library: 'Soli',
+    libraryTarget: "umd",
+    globalObject: "this",
+    umdNamedDefine: true,
     publicPath: '',
   },
   module: {

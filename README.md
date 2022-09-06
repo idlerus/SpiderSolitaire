@@ -7,7 +7,7 @@ simpliest usage:
 
 ```js
 // import
-import Soli from "./soli";
+import Soli from 'spidersolitairegame';
 
 // setup one suite type (1, 2 or 4 are available)
 let soli = new Soli(1);
