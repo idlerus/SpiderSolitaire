@@ -270,9 +270,13 @@ class Soli
     if(count > 0)
     {
       let c = this.slots[slot][index];
+      if(c === undefined)
+      {
+        return false;
+      }
       for(let i = 0; i < count; i++)
       {
-        if(c.type !== this.slots[slot][index + i].type)
+        if(this.slots[slot][index + i] !== undefined && c.type !== this.slots[slot][index + i].type)
         {
           return false;
         }
@@ -313,7 +317,10 @@ class Soli
               if(string === 'A2345678910JQK')
               {
                 this.slots[i].splice(this.slots[i].length-13, 13);
-                this.slots[i][this.slots[i].length -1].hidden = false;
+                if(this.slots[i][this.slots[i].length -1] !== undefined)
+                {
+                  this.slots[i][this.slots[i].length - 1].hidden = false;
+                }
                 this.updateHist('rowComplete', {slotIn: i, type: c.type});
               }
             }
@@ -420,19 +427,19 @@ class Soli
     else if(action.action === 'rowComplete')
     {
       this.slots[action.data.slotIn].push(
-        {type: action.data.type, c: 'A', hidden: false},
-        {type: action.data.type, c: '2', hidden: false},
-        {type: action.data.type, c: '3', hidden: false},
-        {type: action.data.type, c: '4', hidden: false},
-        {type: action.data.type, c: '5', hidden: false},
-        {type: action.data.type, c: '6', hidden: false},
-        {type: action.data.type, c: '7', hidden: false},
-        {type: action.data.type, c: '8', hidden: false},
-        {type: action.data.type, c: '9', hidden: false},
-        {type: action.data.type, c: '10', hidden: false},
-        {type: action.data.type, c: 'J', hidden: false},
-        {type: action.data.type, c: 'Q', hidden: false},
         {type: action.data.type, c: 'K', hidden: false},
+        {type: action.data.type, c: 'Q', hidden: false},
+        {type: action.data.type, c: 'J', hidden: false},
+        {type: action.data.type, c: '10', hidden: false},
+        {type: action.data.type, c: '9', hidden: false},
+        {type: action.data.type, c: '8', hidden: false},
+        {type: action.data.type, c: '7', hidden: false},
+        {type: action.data.type, c: '6', hidden: false},
+        {type: action.data.type, c: '5', hidden: false},
+        {type: action.data.type, c: '4', hidden: false},
+        {type: action.data.type, c: '3', hidden: false},
+        {type: action.data.type, c: '2', hidden: false},
+        {type: action.data.type, c: 'A', hidden: false},
       );
 
       this.rollBackHist();
@@ -445,7 +452,7 @@ class Soli
   {
     let possibleMoves = 0;
 
-    if(this.set.length > 1)
+    if(this.set.length > 1 || this.win === true)
     {
       return;
     }
