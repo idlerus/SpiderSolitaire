@@ -9,6 +9,8 @@ class Soli
 
   private pack: string[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
   private type: string[] = ['RH', 'RD', 'BL', 'BD'];
+  private score: number = 500;
+  private scoreDisplay: HTMLSpanElement;
   private sCount: number;
   private set: c[] = [];
 
@@ -31,10 +33,72 @@ class Soli
     this.gameSet(types);
   }
 
+  public static createGame()
+  {
+    let settings = document.createElement('div');
+    settings.id = 'soliGSettings';
+
+    let oneSetLabel = document.createElement('label');
+    oneSetLabel.innerText = 'One set';
+    let oneSet = document.createElement('input');
+    oneSetLabel.appendChild(oneSet);
+    oneSet.type = 'radio';
+    oneSet.value = '1';
+    oneSet.classList.add('soliGSettingsInputRadio');
+    settings.appendChild(oneSetLabel);
+
+    let twoSetLabel = document.createElement('label');
+    twoSetLabel.innerText = 'Two sets';
+    let twoSet = document.createElement('input');
+    twoSetLabel.appendChild(twoSet);
+    twoSet.type = 'radio';
+    twoSet.value = '2';
+    twoSet.classList.add('soliGSettingsInputRadio');
+    settings.appendChild(twoSetLabel);
+
+    let fourSetLabel = document.createElement('label');
+    fourSetLabel.innerText = 'Four sets';
+    let fourSet = document.createElement('input');
+    fourSetLabel.appendChild(fourSet);
+    fourSet.type = 'radio';
+    fourSet.value = '4';
+    fourSet.classList.add('soliGSettingsInputRadio');
+    settings.appendChild(fourSetLabel);
+
+    let submit = document.createElement('button');
+    submit.innerText = 'Start game';
+    submit.addEventListener('click', () => {
+      let parent = settings.parentNode.parentElement;
+
+      let inputs = document.getElementsByClassName('soliGSettingsInputRadio');
+      let sets = '1';
+      for(let i in inputs)
+      {
+        // @ts-ignore
+        if(inputs[i].checked)
+        {
+          // @ts-ignore
+          sets = inputs[i].value;
+        }
+      }
+
+
+      let soli = new Soli(parseInt(sets));
+      soli.gameSet(parseInt(sets));
+      parent.appendChild(soli.renderG());
+
+      document.getElementById('soliGSettings').remove();
+    });
+    settings.appendChild(submit);
+
+    return settings;
+  }
+
   public gameSet(types: number = 1): void
   {
     this.set = [];
     this.slots = {};
+    this.score = 500;
 
     let multiplier = 1;
     if(![1,2,4].includes(types))
@@ -95,6 +159,7 @@ class Soli
     this.rowSolved();
     this.gameWon();
     this.checkLost();
+    this.scoreDisplay.innerText = this.score.toString();
 
     this.table.innerHTML = '';
 
@@ -102,6 +167,7 @@ class Soli
     {
       let win = document.createElement('span');
       win.innerText = 'You win!';
+      win.id = 'win';
       win.classList.add('win');
       win.style.position = 'absolute';
       win.style.top = '50%';
@@ -114,11 +180,20 @@ class Soli
       win.style.boxShadow = '0 10px 15px rgb(0 0 0 / 30%)';
       this.table.appendChild(win);
     }
+    else
+    {
+      let win = document.getElementById('win');
+      if(win !== null)
+      {
+        win.remove();
+      }
+    }
 
     if(this.lose)
     {
       let lose = document.createElement('span');
       lose.innerText = 'You lost!';
+      lose.id = 'lose';
       lose.classList.add('lose');
       lose.style.position = 'absolute';
       lose.style.top = '50%';
@@ -130,6 +205,14 @@ class Soli
       lose.style.border = '3px solid #ddd';
       lose.style.boxShadow = '0 10px 15px rgb(0 0 0 / 30%)';
       this.table.appendChild(lose);
+    }
+    else
+    {
+      let lose = document.getElementById('lose');
+      if(lose !== null)
+      {
+        lose.remove();
+      }
     }
 
     for(let i in this.slots)
@@ -231,6 +314,10 @@ class Soli
     histButton.addEventListener('click', histListener.bind(this));
     menu.appendChild(histButton);
 
+    this.scoreDisplay = document.createElement('span');
+    this.scoreDisplay.innerText = this.score.toString();
+    menu.appendChild(this.scoreDisplay);
+
     let restartButton = document.createElement('button');
     let restartListener = () => {
       this.gameSet(this.typesCount);
@@ -283,6 +370,11 @@ class Soli
 
         if(this.slots[slot][index + i + 1] !== undefined)
         {
+          if (this.slots[slot][index + i].c === 'A' && this.slots[slot][index + i + 1] !== undefined)
+          {
+            return false;
+          }
+
           if (this.slots[slot][index + i].c !== 'A' && this.slots[slot][index + i + 1].c !== this.pack[this.pack.indexOf(this.slots[slot][index + i].c) - 1])
           {
             return false;
@@ -308,11 +400,13 @@ class Soli
             if(this.slots[i].length >= 12)
             {
               let test = this.slots[i].slice(-13).reverse();
-              console.log(test, this.slots[i]);
               let string = '';
               for(let c of test)
               {
-                string += c.c;
+                if(c.hidden !== true)
+                {
+                  string += c.c;
+                }
               }
               if(string === 'A2345678910JQK')
               {
@@ -321,6 +415,7 @@ class Soli
                 {
                   this.slots[i][this.slots[i].length - 1].hidden = false;
                 }
+                this.score += 100;
                 this.updateHist('rowComplete', {slotIn: i, type: c.type});
               }
             }
@@ -342,7 +437,8 @@ class Soli
 
     if(this.slots[slotTarget].length < 1 || this.canPlace(sourceC, targetC))
     {
-      this.updateHist('move', {moveFromSlot: slot, moveFromIndex: index, moveToSlot: slotTarget, moveToIndex: this.slots[slotTarget].length});
+      this.score--;
+      this.updateHist('move', {moveFromSlot: slot, moveFromIndex: index, moveToSlot: slotTarget, moveToIndex: this.slots[slotTarget].length, moveFromHidden: (this.slots[slot][index-1] !== undefined ?? this.slots[slot][index-1].hidden)});
 
       let moveIndex = this.slots[slot].length-index;
       let tempDeck = [];
@@ -411,6 +507,11 @@ class Soli
         this.slots[action.data.moveFromSlot].push(c);
       }
 
+      if(action.data.moveFromHidden)
+      {
+        this.slots[action.data.moveFromSlot][action.data.moveFromIndex-1].hidden = true;
+      }
+
       if(this.slots[action.data.moveToSlot][action.data.moveToIndex-1] !== undefined && this.slots[action.data.moveToSlot][action.data.moveToIndex-1].hidden !== false)
       {
         this.slots[action.data.moveToSlot][action.data.moveToIndex-1].hidden = false;
@@ -454,6 +555,12 @@ class Soli
 
     if(this.set.length > 1 || this.win === true)
     {
+      return;
+    }
+
+    if(this.score <= 0)
+    {
+      this.lose = true;
       return;
     }
 

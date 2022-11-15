@@ -2,6 +2,11 @@ $background: linear-gradient(45deg, rgb(192, 105, 105) 0%, rgb(204, 83, 83) 45%,
 $background-size: 5px 5px;
 $background-position: 0 0, 10px 0, 10px -10px, 0px 10px;
 
+#soliGSettings {
+  display: flex;
+  flex-direction: column;
+}
+
 #soliG {
   display: flex;
   width: 100%;
@@ -82,7 +87,7 @@ $background-position: 0 0, 10px 0, 10px -10px, 0px 10px;
         }
 
         &.rd span:last-child {
-          color: #1bff00;
+          color: #29871e;
 
           &::after {
             font-size: 10px;
