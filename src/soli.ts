@@ -42,6 +42,7 @@ class Soli
     oneSetLabel.innerText = 'One set';
     let oneSet = document.createElement('input');
     oneSetLabel.appendChild(oneSet);
+    oneSet.name = 'soliGSettingsInputSets';
     oneSet.type = 'radio';
     oneSet.value = '1';
     oneSet.classList.add('soliGSettingsInputRadio');
@@ -51,6 +52,7 @@ class Soli
     twoSetLabel.innerText = 'Two sets';
     let twoSet = document.createElement('input');
     twoSetLabel.appendChild(twoSet);
+    twoSet.name = 'soliGSettingsInputSets';
     twoSet.type = 'radio';
     twoSet.value = '2';
     twoSet.classList.add('soliGSettingsInputRadio');
@@ -60,6 +62,7 @@ class Soli
     fourSetLabel.innerText = 'Four sets';
     let fourSet = document.createElement('input');
     fourSetLabel.appendChild(fourSet);
+    fourSet.name = 'soliGSettingsInputSets';
     fourSet.type = 'radio';
     fourSet.value = '4';
     fourSet.classList.add('soliGSettingsInputRadio');
@@ -438,7 +441,26 @@ class Soli
     if(this.slots[slotTarget].length < 1 || this.canPlace(sourceC, targetC))
     {
       this.score--;
-      this.updateHist('move', {moveFromSlot: slot, moveFromIndex: index, moveToSlot: slotTarget, moveToIndex: this.slots[slotTarget].length, moveFromHidden: (this.slots[slot][index-1] !== undefined ?? this.slots[slot][index-1].hidden)});
+      if(this.slots[slot][index-1] !== undefined)
+      {
+        this.updateHist('move', {
+          moveFromSlot: slot,
+          moveFromIndex: index,
+          moveToSlot: slotTarget,
+          moveToIndex: this.slots[slotTarget].length,
+          moveFromHidden: this.slots[slot][index - 1].hidden
+        });
+      }
+      else
+      {
+        this.updateHist('move', {
+          moveFromSlot: slot,
+          moveFromIndex: index,
+          moveToSlot: slotTarget,
+          moveToIndex: this.slots[slotTarget].length,
+          moveFromHidden: false
+        });
+      }
 
       let moveIndex = this.slots[slot].length-index;
       let tempDeck = [];
