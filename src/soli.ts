@@ -404,11 +404,11 @@ class Soli
             {
               let test = this.slots[i].slice(-13).reverse();
               let string = '';
-              for(let c of test)
+              for(let cc of test)
               {
-                if(c.hidden !== true)
+                if(cc.hidden !== true && c.type === cc.type)
                 {
-                  string += c.c;
+                  string += cc.c;
                 }
               }
               if(string === 'A2345678910JQK')
